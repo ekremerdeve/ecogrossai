@@ -13,7 +13,17 @@ def ara(kelime):
     }
 
     response = requests.get(url, headers=headers)
-    data = response.json()
+
+    if response.status_code != 200:
+        return jsonify({"hata":"Migros sunucusuna erişilemedi"})
+
+    try:
+        data = response.json()
+    except:
+        return jsonify({
+            "hata":"JSON okunamadı",
+            "cevap": response.text[:500]
+    })
 
     products = data["data"]["searchInfo"]["storeProductInfos"]
 
